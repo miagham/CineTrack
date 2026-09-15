@@ -1,0 +1,14 @@
+C:\Users\miiaa\source\repos\ProgIII2026\CreativeWorkshop\ProgSchedulerWorkshopAssign\bin\Debug\net8.0\ProgSchedulerWorkshopAssign.exe
+C:\Users\miiaa\source\repos\ProgIII2026\CreativeWorkshop\ProgSchedulerWorkshopAssign\bin\Debug\net8.0\ProgSchedulerWorkshopAssign.deps.json
+C:\Users\miiaa\source\repos\ProgIII2026\CreativeWorkshop\ProgSchedulerWorkshopAssign\bin\Debug\net8.0\ProgSchedulerWorkshopAssign.runtimeconfig.json
+C:\Users\miiaa\source\repos\ProgIII2026\CreativeWorkshop\ProgSchedulerWorkshopAssign\bin\Debug\net8.0\ProgSchedulerWorkshopAssign.dll
+C:\Users\miiaa\source\repos\ProgIII2026\CreativeWorkshop\ProgSchedulerWorkshopAssign\bin\Debug\net8.0\ProgSchedulerWorkshopAssign.pdb
+C:\Users\miiaa\source\repos\ProgIII2026\CreativeWorkshop\ProgSchedulerWorkshopAssign\obj\Debug\net8.0\ProgSchedulerWorkshopAssign.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\miiaa\source\repos\ProgIII2026\CreativeWorkshop\ProgSchedulerWorkshopAssign\obj\Debug\net8.0\ProgSchedulerWorkshopAssign.AssemblyInfoInputs.cache
+C:\Users\miiaa\source\repos\ProgIII2026\CreativeWorkshop\ProgSchedulerWorkshopAssign\obj\Debug\net8.0\ProgSchedulerWorkshopAssign.AssemblyInfo.cs
+C:\Users\miiaa\source\repos\ProgIII2026\CreativeWorkshop\ProgSchedulerWorkshopAssign\obj\Debug\net8.0\ProgSchedulerWorkshopAssign.csproj.CoreCompileInputs.cache
+C:\Users\miiaa\source\repos\ProgIII2026\CreativeWorkshop\ProgSchedulerWorkshopAssign\obj\Debug\net8.0\ProgSchedulerWorkshopAssign.dll
+C:\Users\miiaa\source\repos\ProgIII2026\CreativeWorkshop\ProgSchedulerWorkshopAssign\obj\Debug\net8.0\refint\ProgSchedulerWorkshopAssign.dll
+C:\Users\miiaa\source\repos\ProgIII2026\CreativeWorkshop\ProgSchedulerWorkshopAssign\obj\Debug\net8.0\ProgSchedulerWorkshopAssign.pdb
+C:\Users\miiaa\source\repos\ProgIII2026\CreativeWorkshop\ProgSchedulerWorkshopAssign\obj\Debug\net8.0\ProgSchedulerWorkshopAssign.genruntimeconfig.cache
+C:\Users\miiaa\source\repos\ProgIII2026\CreativeWorkshop\ProgSchedulerWorkshopAssign\obj\Debug\net8.0\ref\ProgSchedulerWorkshopAssign.dll
