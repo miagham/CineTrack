@@ -1,14 +1,74 @@
-﻿<Page x:Class="CineTrack.HomePage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:CineTrack"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="HomePage">
+<local:CinePage x:Class="CineTrack.HomePage"
+                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                xmlns:local="clr-namespace:CineTrack"
+                xmlns:c="clr-namespace:CineTrack.Controls"
+                Title="Home">
+    <StackPanel>
+        <!-- ===== Hero: recommended for you ===== -->
+        <Border x:Name="Hero" Background="{StaticResource NearBlack}" BorderBrush="{StaticResource BorderSubtle}"
+                BorderThickness="1" CornerRadius="20" MinHeight="500" c:Ui.ClipRadius="20">
+            <Grid>
+                <ContentControl x:Name="HeroBackdrop" Focusable="False" IsTabStop="False"
+                                HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
+                <Border x:Name="HeroFade" Background="{StaticResource HeroFadeBrush}"/>
 
-    <Grid>
-        
-    </Grid>
-</Page>
+                <Grid x:Name="HeroInner" Margin="56,56,56,44">
+                    <StackPanel x:Name="HeroText" HorizontalAlignment="Left" VerticalAlignment="Center" MaxWidth="640">
+                        <TextBlock Style="{StaticResource Text.Eyebrow}" Text="★  RECOMMENDED FOR YOU"/>
+                        <TextBlock x:Name="HeroTitle" Style="{StaticResource Text.Display}" Margin="0,14,0,16"/>
+                        <WrapPanel x:Name="HeroMeta" Margin="0,0,0,18"/>
+                        <TextBlock x:Name="HeroSynopsis" Style="{StaticResource Text.Body}" MaxWidth="480"
+                                   HorizontalAlignment="Left" Margin="0,0,0,30"/>
+                        <WrapPanel x:Name="HeroButtons"/>
+                    </StackPanel>
+                    <StackPanel x:Name="HeroDots" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <!-- ===== Search ===== -->
+        <StackPanel Margin="0,80,0,0">
+            <TextBlock Style="{StaticResource Text.Eyebrow}" Text="SEARCH" Margin="0,0,0,6"/>
+            <TextBlock Style="{StaticResource Text.Section}" Text="What are we watching tonight?" Margin="0,0,0,24"/>
+            <c:SearchBar x:Name="HomeSearch"/>
+            <ContentControl x:Name="SuggestionsHost" Focusable="False" IsTabStop="False"/>
+        </StackPanel>
+
+        <!-- ===== Your movie stats ===== -->
+        <StackPanel Margin="0,72,0,0">
+            <ContentControl x:Name="StatsHeader" Focusable="False" IsTabStop="False"/>
+            <UniformGrid x:Name="StatsGrid" Columns="4" Margin="0,0,-16,-16"/>
+        </StackPanel>
+
+        <!-- ===== Trending ===== -->
+        <StackPanel Margin="0,72,0,0">
+            <ContentControl x:Name="TrendingHeader" Focusable="False" IsTabStop="False"/>
+            <c:PosterRow x:Name="TrendingRow"/>
+        </StackPanel>
+
+        <!-- ===== Recent history + watchlist ===== -->
+        <Grid x:Name="BottomGrid" Margin="0,72,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="HistoryColumn" Width="2*"/>
+                <ColumnDefinition x:Name="WatchlistColumn" Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Border x:Name="HistoryPanel" Style="{StaticResource Panel}" Padding="28">
+                <StackPanel>
+                    <ContentControl x:Name="HistoryHeader" Focusable="False" IsTabStop="False"/>
+                    <ContentControl x:Name="HistoryHost" Focusable="False" IsTabStop="False"/>
+                </StackPanel>
+            </Border>
+            <Border x:Name="WatchlistPanel" Grid.Column="1" Style="{StaticResource Panel}" Padding="28" Margin="24,0,0,0">
+                <StackPanel>
+                    <ContentControl x:Name="WatchlistHeader" Focusable="False" IsTabStop="False"/>
+                    <StackPanel x:Name="WatchlistItems"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </StackPanel>
+</local:CinePage>

@@ -1,14 +1,65 @@
-﻿<Page x:Class="CineTrack.GenresPage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:CineTrack"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="GenresPage">
+<local:CinePage x:Class="CineTrack.GenresPage"
+                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                xmlns:local="clr-namespace:CineTrack"
+                xmlns:c="clr-namespace:CineTrack.Controls"
+                Title="Discover">
+    <StackPanel>
+        <ContentControl x:Name="HeaderHost" Focusable="False" IsTabStop="False"/>
 
-    <Grid>
-        
-    </Grid>
-</Page>
+        <WrapPanel x:Name="GenreChips" Margin="0,32,0,0"/>
+
+        <Button x:Name="FiltersToggle" Style="{StaticResource Btn.Secondary}" c:Ui.Glyph="&#xE71C;" Content="Filters"
+                HorizontalAlignment="Left" Margin="0,8,0,0" Visibility="Collapsed" Click="FiltersToggle_Click"/>
+
+        <Grid x:Name="LayoutGrid" Margin="0,24,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="FiltersColumn" Width="240"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <ContentControl x:Name="FiltersHost" Focusable="False" IsTabStop="False" VerticalAlignment="Top">
+                <Border x:Name="FiltersPanel" Style="{StaticResource Panel}" Padding="22">
+                    <StackPanel>
+                        <TextBlock x:Name="FiltersHeading" Style="{StaticResource Text.Panel}" Text="Filters" Margin="0,0,0,20"/>
+
+                        <TextBlock Style="{StaticResource Text.Eyebrow}" Text="RUNTIME" Margin="0,0,0,14"/>
+                        <CheckBox x:Name="RtUnder90" Content="Under 90 min"/>
+                        <CheckBox x:Name="Rt90To120" Content="90–120 min"/>
+                        <CheckBox x:Name="Rt120To180" Content="120–180 min"/>
+                        <CheckBox x:Name="RtOver180" Content="Over 180 min"/>
+
+                        <Rectangle Height="1" Fill="{StaticResource CreamFaint}" Margin="0,8,0,20"/>
+                        <TextBlock Style="{StaticResource Text.Eyebrow}" Text="RELEASE YEAR" Margin="0,0,0,14"/>
+                        <Grid Margin="0,0,0,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <ComboBox x:Name="YearFrom" Padding="14,0,30,0" AutomationProperties.Name="Released from"/>
+                            <TextBlock Grid.Column="1" Text="to" Style="{StaticResource Text.Meta}" Margin="8,0" VerticalAlignment="Center"/>
+                            <ComboBox x:Name="YearTo" Grid.Column="2" Padding="14,0,30,0" AutomationProperties.Name="Released to"/>
+                        </Grid>
+
+                        <Rectangle Height="1" Fill="{StaticResource CreamFaint}" Margin="0,8,0,20"/>
+                        <TextBlock Style="{StaticResource Text.Eyebrow}" Text="RATING" Margin="0,0,0,14"/>
+                        <CheckBox x:Name="Rating1To3" Content="1–3 stars"/>
+                        <CheckBox x:Name="Rating3To4" Content="3–4 stars"/>
+                        <CheckBox x:Name="Rating4Plus" Content="4+ stars"/>
+
+                        <Rectangle Height="1" Fill="{StaticResource CreamFaint}" Margin="0,8,0,20"/>
+                        <TextBlock Style="{StaticResource Text.Eyebrow}" Text="STATUS" Margin="0,0,0,14"/>
+                        <CheckBox x:Name="NotWatched" Content="Not watched yet"/>
+                        <CheckBox x:Name="HideWatchlist" Content="Hide my watchlist"/>
+
+                        <Button Style="{StaticResource Btn.Primary}" Content="Apply filters" Margin="0,16,0,10" Click="Apply_Click"/>
+                        <Button Style="{StaticResource Btn.Secondary}" Content="Reset" Click="Reset_Click"/>
+                    </StackPanel>
+                </Border>
+            </ContentControl>
+
+            <StackPanel x:Name="Rows" Grid.Column="1" Margin="32,0,0,0"/>
+        </Grid>
+    </StackPanel>
+</local:CinePage>

@@ -1,0 +1,41 @@
+<UserControl x:Class="CineTrack.Controls.PosterCard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:c="clr-namespace:CineTrack.Controls"
+             Focusable="True" IsTabStop="True" Cursor="Hand"
+             FocusVisualStyle="{StaticResource GoldFocusCard}">
+    <Border x:Name="Card" Background="{StaticResource NearBlack}" BorderBrush="{StaticResource CreamFaint}"
+            BorderThickness="1" CornerRadius="14" Padding="8">
+        <Border.RenderTransform>
+            <TranslateTransform x:Name="Lift"/>
+        </Border.RenderTransform>
+        <StackPanel>
+            <Grid x:Name="PosterFrame" c:Ui.ClipRadius="10">
+                <ContentControl x:Name="PosterHost" Focusable="False" IsTabStop="False" RenderTransformOrigin="0.5,0.5">
+                    <ContentControl.RenderTransform>
+                        <ScaleTransform x:Name="Zoom"/>
+                    </ContentControl.RenderTransform>
+                </ContentControl>
+                <ContentControl x:Name="TagHost" Focusable="False" IsTabStop="False"
+                                HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8"/>
+
+                <!-- Hover / focus / tap overlay -->
+                <Border x:Name="Overlay" Background="{StaticResource Scrim}" Visibility="Collapsed" Opacity="0">
+                    <StackPanel VerticalAlignment="Center" Margin="12">
+                        <TextBlock x:Name="OverlayMeta" Style="{StaticResource Text.Meta}" Foreground="{StaticResource Cream}"
+                                   HorizontalAlignment="Center" Margin="0,0,0,14"/>
+                        <Button x:Name="WatchlistButton" Style="{StaticResource Btn.Primary}" FontSize="13" Padding="14,9"
+                                Margin="0,0,0,8" Click="WatchlistButton_Click"/>
+                        <Button x:Name="DetailsButton" Style="{StaticResource Btn.Secondary}" FontSize="13" Padding="14,9"
+                                Content="View details" Click="DetailsButton_Click"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+            <TextBlock x:Name="TitleText" Style="{StaticResource Text.CardTitle}" Margin="4,12,4,4"/>
+            <DockPanel Margin="4,0,4,4">
+                <ContentControl x:Name="RatingHost" DockPanel.Dock="Right" Focusable="False" IsTabStop="False" Margin="8,0,0,0"/>
+                <TextBlock x:Name="MetaText" Style="{StaticResource Text.Meta}"/>
+            </DockPanel>
+        </StackPanel>
+    </Border>
+</UserControl>

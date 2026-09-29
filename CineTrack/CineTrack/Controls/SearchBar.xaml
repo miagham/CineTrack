@@ -1,0 +1,33 @@
+<UserControl x:Class="CineTrack.Controls.SearchBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:c="clr-namespace:CineTrack.Controls">
+    <!-- The brightest element on every screen: cream pill on dark. -->
+    <c:PillBorder x:Name="Pill" Background="{StaticResource Cream}" BorderThickness="2"
+            BorderBrush="{StaticResource Cream}" Padding="5" Height="48">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="SearchIcon" Text="&#xE721;" Style="{StaticResource Text.Icon}" FontSize="15"
+                       Foreground="{StaticResource NearBlack}" Margin="14,0,10,0"/>
+            <Grid Grid.Column="1">
+                <TextBlock x:Name="Placeholder" Text="Search movies, actors, directors…" VerticalAlignment="Center"
+                           FontWeight="Medium" FontSize="15" Foreground="{StaticResource NearBlack}" Opacity="0.62"
+                           IsHitTestVisible="False" TextTrimming="CharacterEllipsis" Margin="2,0,0,0"/>
+                <TextBox x:Name="Input" Style="{StaticResource SearchInput}" FontSize="15"
+                         AutomationProperties.Name="Search movies, actors, directors"
+                         TextChanged="Input_TextChanged" KeyDown="Input_KeyDown"/>
+            </Grid>
+            <Button x:Name="FiltersButton" Grid.Column="2" Style="{StaticResource Btn.Base}" Content="Filters"
+                    Foreground="{StaticResource NearBlack}" BorderBrush="{StaticResource NearBlackMuted}"
+                    FontSize="13" Padding="16,0" Margin="0,0,8,0" Visibility="Collapsed"
+                    AutomationProperties.Name="Open filters on Discover" Click="FiltersButton_Click"/>
+            <Button x:Name="SubmitButton" Grid.Column="3" Style="{StaticResource Btn.Dark}" Content="Search"
+                    FontSize="14" Padding="22,0" Click="SubmitButton_Click"/>
+        </Grid>
+    </c:PillBorder>
+</UserControl>

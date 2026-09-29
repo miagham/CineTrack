@@ -1,0 +1,686 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:c="clr-namespace:CineTrack.Controls">
+
+    <!--
+        CineTrack design tokens (spec section 3). Only these six colors are used;
+        everything else is one of them at reduced opacity.
+    -->
+    <Color x:Key="DeepRedColor">#5A0B12</Color>
+    <Color x:Key="DarkBurgundyColor">#35070B</Color>
+    <Color x:Key="NearBlackColor">#120607</Color>
+    <Color x:Key="CreamColor">#F5F2EA</Color>
+    <Color x:Key="GoldColor">#C9A227</Color>
+    <Color x:Key="MutedGoldColor">#8F741B</Color>
+
+    <SolidColorBrush x:Key="DeepRed" Color="{StaticResource DeepRedColor}"/>
+    <SolidColorBrush x:Key="DarkBurgundy" Color="{StaticResource DarkBurgundyColor}"/>
+    <SolidColorBrush x:Key="NearBlack" Color="{StaticResource NearBlackColor}"/>
+    <SolidColorBrush x:Key="Cream" Color="{StaticResource CreamColor}"/>
+    <SolidColorBrush x:Key="Gold" Color="{StaticResource GoldColor}"/>
+    <SolidColorBrush x:Key="MutedGold" Color="{StaticResource MutedGoldColor}"/>
+
+    <!-- Derived: cream at 65% for metadata, muted gold at 35% for panel borders. -->
+    <SolidColorBrush x:Key="TextMuted" Color="#A6F5F2EA"/>
+    <SolidColorBrush x:Key="BorderSubtle" Color="#598F741B"/>
+    <SolidColorBrush x:Key="CreamFaint" Color="#17F5F2EA"/>
+    <SolidColorBrush x:Key="CreamHover" Color="#24F5F2EA"/>
+    <SolidColorBrush x:Key="Scrim" Color="#D9120607"/>
+    <SolidColorBrush x:Key="NearBlackMuted" Color="#99120607"/>
+    <SolidColorBrush x:Key="Track" Color="#1FF5F2EA"/>
+
+    <FontFamily x:Key="Playfair">pack://application:,,,/Fonts/#Playfair Display</FontFamily>
+    <FontFamily x:Key="Manrope">pack://application:,,,/Fonts/#Manrope ExtraLight</FontFamily>
+    <FontFamily x:Key="Icons">Segoe Fluent Icons, Segoe MDL2 Assets</FontFamily>
+
+    <CornerRadius x:Key="RadiusCard">16</CornerRadius>
+    <CornerRadius x:Key="RadiusPoster">10</CornerRadius>
+
+    <!-- ===== Atmosphere (background only) ===== -->
+
+    <!-- Vertical curtain folds: burgundy shadows over deep red. -->
+    <LinearGradientBrush x:Key="CurtainBrush" MappingMode="Absolute" StartPoint="0,0" EndPoint="140,0" SpreadMethod="Repeat">
+        <GradientStop Color="#0035070B" Offset="0"/>
+        <GradientStop Color="#0CF5F2EA" Offset="0.18"/>
+        <GradientStop Color="#0035070B" Offset="0.36"/>
+        <GradientStop Color="#9935070B" Offset="0.7"/>
+        <GradientStop Color="#0035070B" Offset="1"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="VignetteBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#80120607" Offset="0"/>
+        <GradientStop Color="#00120607" Offset="0.3"/>
+        <GradientStop Color="#00120607" Offset="0.7"/>
+        <GradientStop Color="#99120607" Offset="1"/>
+    </LinearGradientBrush>
+
+    <!-- Hero panels: solid near-black behind the text, fading to reveal the backdrop on the right. -->
+    <LinearGradientBrush x:Key="HeroFadeBrush" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#FF120607" Offset="0"/>
+        <GradientStop Color="#F2120607" Offset="0.42"/>
+        <GradientStop Color="#80120607" Offset="0.72"/>
+        <GradientStop Color="#1A120607" Offset="1"/>
+    </LinearGradientBrush>
+
+    <!-- Fine crosshatch grain. -->
+    <DrawingBrush x:Key="GrainBrush" TileMode="Tile" Viewport="0,0,5,5" ViewportUnits="Absolute" Stretch="None">
+        <DrawingBrush.Drawing>
+            <GeometryDrawing Geometry="M0,0 L5,5 M5,0 L0,5">
+                <GeometryDrawing.Pen>
+                    <Pen Brush="#26120607" Thickness="0.6"/>
+                </GeometryDrawing.Pen>
+            </GeometryDrawing>
+        </DrawingBrush.Drawing>
+    </DrawingBrush>
+
+    <!-- Film-strip edges: sprocket holes on near-black. -->
+    <DrawingBrush x:Key="FilmStripVertical" TileMode="Tile" Viewport="0,0,16,22" ViewportUnits="Absolute" Stretch="None">
+        <DrawingBrush.Drawing>
+            <DrawingGroup>
+                <GeometryDrawing Brush="{StaticResource NearBlack}" Geometry="M0,0 H16 V22 H0 Z"/>
+                <GeometryDrawing Brush="#338F741B">
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="4,6,8,10" RadiusX="2" RadiusY="2"/>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+        </DrawingBrush.Drawing>
+    </DrawingBrush>
+
+    <DrawingBrush x:Key="FilmStripHorizontal" TileMode="Tile" Viewport="0,0,22,16" ViewportUnits="Absolute" Stretch="None">
+        <DrawingBrush.Drawing>
+            <DrawingGroup>
+                <GeometryDrawing Brush="{StaticResource NearBlack}" Geometry="M0,0 H22 V16 H0 Z"/>
+                <GeometryDrawing Brush="#338F741B">
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="6,4,10,8" RadiusX="2" RadiusY="2"/>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+        </DrawingBrush.Drawing>
+    </DrawingBrush>
+
+    <!-- Film reel logo mark. -->
+    <GeometryGroup x:Key="ReelGeometry" FillRule="EvenOdd">
+        <EllipseGeometry Center="14,14" RadiusX="14" RadiusY="14"/>
+        <EllipseGeometry Center="14,6.5" RadiusX="3" RadiusY="3"/>
+        <EllipseGeometry Center="21.13,11.68" RadiusX="3" RadiusY="3"/>
+        <EllipseGeometry Center="18.41,20.07" RadiusX="3" RadiusY="3"/>
+        <EllipseGeometry Center="9.59,20.07" RadiusX="3" RadiusY="3"/>
+        <EllipseGeometry Center="6.87,11.68" RadiusX="3" RadiusY="3"/>
+        <EllipseGeometry Center="14,14" RadiusX="1.6" RadiusY="1.6"/>
+    </GeometryGroup>
+
+    <!-- ===== Focus ===== -->
+
+    <Style x:Key="GoldFocusPill">
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <c:PillBorder Margin="-3" BorderBrush="{StaticResource Gold}" BorderThickness="2" SnapsToDevicePixels="True"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="GoldFocusCard">
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Border Margin="-3" BorderBrush="{StaticResource Gold}" BorderThickness="2" CornerRadius="18" SnapsToDevicePixels="True"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ===== Typography ===== -->
+
+    <Style x:Key="Text.Display" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Playfair}"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+        <Setter Property="FontSize" Value="92"/>
+        <Setter Property="Foreground" Value="{StaticResource Cream}"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="LineStackingStrategy" Value="BlockLineHeight"/>
+        <Setter Property="LineHeight" Value="96"/>
+    </Style>
+
+    <Style x:Key="Text.PageTitle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Playfair}"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+        <Setter Property="FontSize" Value="60"/>
+        <Setter Property="Foreground" Value="{StaticResource Cream}"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+    </Style>
+
+    <Style x:Key="Text.Section" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Playfair}"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+        <Setter Property="FontSize" Value="36"/>
+        <Setter Property="Foreground" Value="{StaticResource Cream}"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+    </Style>
+
+    <Style x:Key="Text.Panel" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Playfair}"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+        <Setter Property="FontSize" Value="24"/>
+        <Setter Property="Foreground" Value="{StaticResource Cream}"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+    </Style>
+
+    <Style x:Key="Text.Stat" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Playfair}"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+        <Setter Property="FontSize" Value="30"/>
+        <Setter Property="Foreground" Value="{StaticResource Cream}"/>
+        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+    </Style>
+
+    <Style x:Key="Text.Eyebrow" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Manrope}"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Foreground" Value="{StaticResource Gold}"/>
+        <!-- Eyebrow text is written in uppercase at the call site. -->
+    </Style>
+
+    <Style x:Key="Text.CardTitle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Manrope}"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Foreground" Value="{StaticResource Cream}"/>
+        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+    </Style>
+
+    <Style x:Key="Text.Body" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Manrope}"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="Foreground" Value="{StaticResource Cream}"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="LineStackingStrategy" Value="BlockLineHeight"/>
+        <Setter Property="LineHeight" Value="29"/>
+    </Style>
+
+    <Style x:Key="Text.Meta" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Manrope}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+    </Style>
+
+    <Style x:Key="Text.Rating" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Manrope}"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Foreground" Value="{StaticResource Gold}"/>
+    </Style>
+
+    <Style x:Key="Text.Icon" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Icons}"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <!-- ===== Panels ===== -->
+
+    <Style x:Key="Panel" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource NearBlack}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderSubtle}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="{StaticResource RadiusCard}"/>
+        <Setter Property="Padding" Value="24"/>
+    </Style>
+
+    <!-- ===== Buttons (spec 5.1) ===== -->
+
+    <Style x:Key="Btn.Base" TargetType="Button">
+        <Setter Property="FontFamily" Value="{StaticResource Manrope}"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Padding" Value="22,12"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource Cream}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource GoldFocusPill}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <c:PillBorder x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <StackPanel Orientation="Horizontal" Margin="{TemplateBinding Padding}"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                            <TextBlock x:Name="Glyph" Style="{StaticResource Text.Icon}" Margin="0,0,8,0"
+                                       FontSize="{TemplateBinding FontSize}"
+                                       Text="{Binding (c:Ui.Glyph), RelativeSource={RelativeSource TemplatedParent}}"/>
+                            <ContentPresenter x:Name="Content" VerticalAlignment="Center" RecognizesAccessKey="False"/>
+                        </StackPanel>
+                    </c:PillBorder>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="c:Ui.Glyph" Value="{x:Null}">
+                            <Setter TargetName="Glyph" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="Content" Value="{x:Null}">
+                            <Setter TargetName="Glyph" Property="Margin" Value="0"/>
+                            <Setter TargetName="Content" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Bd" Property="Opacity" Value="0.4"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Primary: gold fill, near-black text. -->
+    <Style x:Key="Btn.Primary" TargetType="Button" BasedOn="{StaticResource Btn.Base}">
+        <Setter Property="Background" Value="{StaticResource Gold}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Gold}"/>
+        <Setter Property="Foreground" Value="{StaticResource NearBlack}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="{StaticResource Cream}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{StaticResource MutedGold}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource MutedGold}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Secondary: transparent, cream outline. -->
+    <Style x:Key="Btn.Secondary" TargetType="Button" BasedOn="{StaticResource Btn.Base}">
+        <Setter Property="BorderBrush" Value="{StaticResource Cream}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource CreamFaint}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{StaticResource CreamHover}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Tertiary: dark fill, subtle border. -->
+    <Style x:Key="Btn.Tertiary" TargetType="Button" BasedOn="{StaticResource Btn.Base}">
+        <Setter Property="Background" Value="{StaticResource DarkBurgundy}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderSubtle}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="{StaticResource MutedGold}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Light action: cream fill, near-black text. -->
+    <Style x:Key="Btn.Light" TargetType="Button" BasedOn="{StaticResource Btn.Base}">
+        <Setter Property="Background" Value="{StaticResource Cream}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Cream}"/>
+        <Setter Property="Foreground" Value="{StaticResource NearBlack}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="{StaticResource Gold}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Done state: gold outline, gold text. -->
+    <Style x:Key="Btn.Done" TargetType="Button" BasedOn="{StaticResource Btn.Base}">
+        <Setter Property="BorderBrush" Value="{StaticResource Gold}"/>
+        <Setter Property="Foreground" Value="{StaticResource Gold}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource CreamFaint}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Near-black pill used inside the cream search bar. -->
+    <Style x:Key="Btn.Dark" TargetType="Button" BasedOn="{StaticResource Btn.Base}">
+        <Setter Property="Background" Value="{StaticResource NearBlack}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource NearBlack}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource DarkBurgundy}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource DarkBurgundy}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Circular icon button; c:Ui.IsActive = gold outline + gold icon. -->
+    <Style x:Key="Btn.Icon" TargetType="Button" BasedOn="{StaticResource Btn.Base}">
+        <Setter Property="Width" Value="40"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="Background" Value="{StaticResource NearBlack}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderSubtle}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="{StaticResource Cream}"/>
+            </Trigger>
+            <Trigger Property="c:Ui.IsActive" Value="True">
+                <Setter Property="BorderBrush" Value="{StaticResource Gold}"/>
+                <Setter Property="Foreground" Value="{StaticResource Gold}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="Btn.IconSmall" TargetType="Button" BasedOn="{StaticResource Btn.Icon}">
+        <Setter Property="Width" Value="34"/>
+        <Setter Property="Height" Value="34"/>
+        <Setter Property="FontSize" Value="13"/>
+    </Style>
+
+    <!-- Text link: "See all ›". -->
+    <Style x:Key="Btn.Link" TargetType="Button" BasedOn="{StaticResource Btn.Base}">
+        <Setter Property="Padding" Value="4,6"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Foreground" Value="{StaticResource Gold}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource Cream}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Header nav link: active = gold with a short underline bar. -->
+    <Style x:Key="Btn.Nav" TargetType="Button">
+        <Setter Property="FontFamily" Value="{StaticResource Manrope}"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="Foreground" Value="{StaticResource Cream}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Padding" Value="12,8"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource GoldFocusPill}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid Background="Transparent">
+                        <ContentPresenter Margin="{TemplateBinding Padding}" HorizontalAlignment="Center" VerticalAlignment="Center" RecognizesAccessKey="False"/>
+                        <Border x:Name="Bar" Height="2" Width="18" CornerRadius="1" Background="{StaticResource Gold}"
+                                VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,0" Visibility="Hidden"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="c:Ui.IsActive" Value="True">
+                            <Setter TargetName="Bar" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource Gold}"/>
+            </Trigger>
+            <Trigger Property="c:Ui.IsActive" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource Gold}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- ===== Chips (spec 5.3) ===== -->
+
+    <!-- Genre chips / filter tabs: dark burgundy; active = gold fill. -->
+    <Style x:Key="Chip" TargetType="Button" BasedOn="{StaticResource Btn.Base}">
+        <Setter Property="Padding" Value="18,9"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Background" Value="{StaticResource DarkBurgundy}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderSubtle}"/>
+        <Setter Property="Margin" Value="0,0,10,10"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="{StaticResource Gold}"/>
+            </Trigger>
+            <Trigger Property="c:Ui.IsActive" Value="True">
+                <Setter Property="Background" Value="{StaticResource Gold}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource Gold}"/>
+                <Setter Property="Foreground" Value="{StaticResource NearBlack}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Suggestion chips under the Home search bar. -->
+    <Style x:Key="Chip.Suggestion" TargetType="Button" BasedOn="{StaticResource Chip}">
+        <Setter Property="Background" Value="{StaticResource NearBlack}"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Padding" Value="16,8"/>
+    </Style>
+
+    <!-- ===== Inputs ===== -->
+
+    <Style x:Key="SearchInput" TargetType="TextBox">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Foreground" Value="{StaticResource NearBlack}"/>
+        <Setter Property="CaretBrush" Value="{StaticResource NearBlack}"/>
+        <Setter Property="SelectionBrush" Value="{StaticResource Gold}"/>
+        <Setter Property="FontFamily" Value="{StaticResource Manrope}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <ScrollViewer x:Name="PART_ContentHost" Background="Transparent" Focusable="False"
+                                  HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"
+                                  VerticalAlignment="Center"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Checkbox: gold fill with near-black check when checked. -->
+    <Style TargetType="CheckBox">
+        <Setter Property="Foreground" Value="{StaticResource Cream}"/>
+        <Setter Property="FontFamily" Value="{StaticResource Manrope}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Margin" Value="0,0,0,12"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="CheckBox">
+                    <StackPanel Orientation="Horizontal" Background="Transparent">
+                        <Border x:Name="Box" Width="20" Height="20" CornerRadius="5" BorderThickness="1.5"
+                                BorderBrush="{StaticResource MutedGold}" Background="Transparent" VerticalAlignment="Center">
+                            <TextBlock x:Name="Check" Text="&#xE73E;" Style="{StaticResource Text.Icon}" FontSize="12"
+                                       FontWeight="Bold" Foreground="{StaticResource NearBlack}" HorizontalAlignment="Center" Visibility="Hidden"/>
+                        </Border>
+                        <ContentPresenter Margin="10,0,0,0" VerticalAlignment="Center" RecognizesAccessKey="False"/>
+                    </StackPanel>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="Box" Property="Background" Value="{StaticResource Gold}"/>
+                            <Setter TargetName="Box" Property="BorderBrush" Value="{StaticResource Gold}"/>
+                            <Setter TargetName="Check" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Box" Property="BorderBrush" Value="{StaticResource Gold}"/>
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter TargetName="Box" Property="BorderBrush" Value="{StaticResource Cream}"/>
+                            <Setter TargetName="Box" Property="BorderThickness" Value="2"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ComboBox: dark pill with a gold-bordered dropdown. -->
+    <Style x:Key="ComboToggle" TargetType="ToggleButton">
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border Background="Transparent"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="ComboBoxItem">
+        <Setter Property="Foreground" Value="{StaticResource Cream}"/>
+        <Setter Property="FontFamily" Value="{StaticResource Manrope}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBoxItem">
+                    <Border x:Name="Bd" Background="Transparent" CornerRadius="8" Padding="12,8">
+                        <ContentPresenter/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsHighlighted" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource DarkBurgundy}"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Foreground" Value="{StaticResource Gold}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="ComboBox">
+        <Setter Property="Foreground" Value="{StaticResource Cream}"/>
+        <Setter Property="Background" Value="{StaticResource NearBlack}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderSubtle}"/>
+        <Setter Property="FontFamily" Value="{StaticResource Manrope}"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Padding" Value="16,0,36,0"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid>
+                        <c:PillBorder x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1"/>
+                        <ContentPresenter IsHitTestVisible="False" Margin="{TemplateBinding Padding}"
+                                          Content="{TemplateBinding SelectionBoxItem}"
+                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                          VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                        <TextBlock Text="&#xE70D;" Style="{StaticResource Text.Icon}" FontSize="11" Foreground="{StaticResource Gold}"
+                                   HorizontalAlignment="Right" Margin="0,0,15,0" IsHitTestVisible="False"/>
+                        <ToggleButton Style="{StaticResource ComboToggle}" ClickMode="Press"
+                                      IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/>
+                        <Popup x:Name="PART_Popup" IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom"
+                               AllowsTransparency="True" Focusable="False" PopupAnimation="Fade">
+                            <Border Background="{StaticResource NearBlack}" BorderBrush="{StaticResource MutedGold}" BorderThickness="1"
+                                    CornerRadius="12" Padding="6" Margin="0,6,0,0"
+                                    MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}"
+                                    MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                    <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                </ScrollViewer>
+                            </Border>
+                        </Popup>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource MutedGold}"/>
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Gold}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ===== Scrollbars ===== -->
+
+    <Style x:Key="ScrollThumb" TargetType="Thumb">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Thumb">
+                    <Border CornerRadius="4" Background="{StaticResource MutedGold}" Opacity="0.75"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ScrollPage" TargetType="RepeatButton">
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="IsTabStop" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RepeatButton">
+                    <Border Background="Transparent"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="ScrollBar">
+        <Setter Property="Width" Value="10"/>
+        <Setter Property="MinWidth" Value="10"/>
+        <Setter Property="Background" Value="{StaticResource NearBlack}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ScrollBar">
+                    <Grid Background="{TemplateBinding Background}">
+                        <Track x:Name="PART_Track" IsDirectionReversed="True" Margin="2,4">
+                            <Track.DecreaseRepeatButton>
+                                <RepeatButton Style="{StaticResource ScrollPage}" Command="ScrollBar.PageUpCommand"/>
+                            </Track.DecreaseRepeatButton>
+                            <Track.Thumb>
+                                <Thumb Style="{StaticResource ScrollThumb}"/>
+                            </Track.Thumb>
+                            <Track.IncreaseRepeatButton>
+                                <RepeatButton Style="{StaticResource ScrollPage}" Command="ScrollBar.PageDownCommand"/>
+                            </Track.IncreaseRepeatButton>
+                        </Track>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="Orientation" Value="Horizontal">
+                <Setter Property="Width" Value="Auto"/>
+                <Setter Property="MinWidth" Value="0"/>
+                <Setter Property="Height" Value="10"/>
+                <Setter Property="MinHeight" Value="10"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ScrollBar">
+                            <Grid Background="{TemplateBinding Background}">
+                                <Track x:Name="PART_Track" IsDirectionReversed="False" Margin="4,2">
+                                    <Track.DecreaseRepeatButton>
+                                        <RepeatButton Style="{StaticResource ScrollPage}" Command="ScrollBar.PageLeftCommand"/>
+                                    </Track.DecreaseRepeatButton>
+                                    <Track.Thumb>
+                                        <Thumb Style="{StaticResource ScrollThumb}"/>
+                                    </Track.Thumb>
+                                    <Track.IncreaseRepeatButton>
+                                        <RepeatButton Style="{StaticResource ScrollPage}" Command="ScrollBar.PageRightCommand"/>
+                                    </Track.IncreaseRepeatButton>
+                                </Track>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+</ResourceDictionary>
