@@ -10,7 +10,7 @@ using CineTrack.Services;
 namespace CineTrack.Controls
 {
     /// <summary>
-    /// Small building blocks from spec section 5, built in code so pages can compose them freely.
+    /// Small building blocks, built in code so pages can compose them freely.
     /// </summary>
     public static class Components
     {
@@ -71,7 +71,7 @@ namespace CineTrack.Controls
             return wrap;
         }
 
-        // ---------- Poster art (spec 5.5 placeholder) ----------
+        // ---------- Poster art ----------
 
         /// <summary>
         /// A poster: the real image when <see cref="Movie.PosterUrl"/> is set, otherwise a tinted
@@ -155,7 +155,7 @@ namespace CineTrack.Controls
             (byte)(a.G + (b.G - a.G) * t),
             (byte)(a.B + (b.B - a.B) * t));
 
-        // ---------- Tags (spec 5.4) ----------
+        // ---------- Tags ----------
 
         public enum TagKind { Watched, Unwatched, HighPriority, Badge }
 
@@ -228,7 +228,7 @@ namespace CineTrack.Controls
             return panel;
         }
 
-        // ---------- Section header (spec 4): eyebrow → heading → right-aligned actions ----------
+        // ---------- Section header: eyebrow → heading → right-aligned actions ----------
 
         public static Grid SectionHeader(string eyebrow, string title, UIElement? actions = null, string headingStyle = "Text.Section")
         {
@@ -275,7 +275,7 @@ namespace CineTrack.Controls
             return b;
         }
 
-        // ---------- Stat card (spec 5.8) ----------
+        // ---------- Stat card ----------
 
         public static Border StatCard(string glyph, string label, string value)
         {
@@ -321,7 +321,7 @@ namespace CineTrack.Controls
             return card;
         }
 
-        // ---------- Progress bar row (spec 5.9) ----------
+        // ---------- Progress bar row ----------
 
         public static FrameworkElement ProgressRow(string label, int count, double fraction, string unitOne = "movie", string unitMany = "movies")
         {
@@ -345,7 +345,7 @@ namespace CineTrack.Controls
             return panel;
         }
 
-        // ---------- Empty state (spec 8) ----------
+        // ---------- Empty state ----------
 
         public static Border EmptyState(string glyph, string title, string message, string? actionText = null, Action? action = null)
         {
@@ -403,7 +403,7 @@ namespace CineTrack.Controls
             };
         }
 
-        // ---------- Compact list row (spec 5.7) ----------
+        // ---------- Compact list row ----------
 
         public static FrameworkElement CompactRow(Movie m, bool showPriorityDetails)
         {

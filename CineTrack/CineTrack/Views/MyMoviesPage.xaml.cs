@@ -7,7 +7,7 @@ using CineTrack.Services;
 
 namespace CineTrack
 {
-    /// <summary>My Movies: everything the user has watched, with their ratings (spec 6.4).</summary>
+    /// <summary>My Movies: everything the user has watched, with their ratings.</summary>
     public partial class MyMoviesPage : CinePage
     {
         readonly UniformGrid _stats = new() { Margin = new Thickness(0, 40, -16, 0) };

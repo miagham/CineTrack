@@ -56,7 +56,7 @@ namespace CineTrack.Controls
         }
     }
 
-    /// <summary>A carousel row of poster cards with ‹ › controls (spec 5.10).</summary>
+    /// <summary>A carousel row of poster cards with ‹ › controls.</summary>
     public class PosterRow : HorizontalScroller
     {
         readonly StackPanel _panel = new() { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 6, 0, 6) };

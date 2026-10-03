@@ -77,7 +77,7 @@ namespace CineTrack
             else Shell.Search("");
         }
 
-        // ---------- Responsive header/footer (spec 9) ----------
+        // ---------- Responsive header/footer ----------
 
         void ApplyLayout()
         {
@@ -152,7 +152,7 @@ namespace CineTrack
             undo?.Invoke();
         }
 
-        // ---------- Rating prompt (spec 8: after marking watched, skippable) ----------
+        // ---------- Rating prompt ----------
 
         public void ShowRatingPrompt(Movie movie)
         {

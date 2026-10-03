@@ -11,7 +11,7 @@ using CineTrack.Services;
 namespace CineTrack.Controls
 {
     /// <summary>
-    /// Vertical movie poster card (spec 5.5). Hover, keyboard focus, or a first tap reveals
+    /// Vertical movie poster card. Hover, keyboard focus, or a first tap reveals
     /// the overlay with "+ Watchlist" and "View details". Status tag always reflects the user's data.
     /// </summary>
     public partial class PosterCard : UserControl
@@ -53,7 +53,7 @@ namespace CineTrack.Controls
                 : Components.Tag("Want to watch", Components.TagKind.Unwatched);
 
             var onList = entry?.OnWatchlist == true;
-            WatchlistButton.Content = onList ? "On watchlist" : "Watchlist";
+            WatchlistButton.Content = onList ? "On Watchlist" : "Watchlist";
             Ui.SetGlyph(WatchlistButton, onList ? Glyphs.Check : Glyphs.Add);
             WatchlistButton.Style = Ui.Res<Style>(onList ? "Btn.Done" : "Btn.Primary");
             AutomationProperties.SetName(WatchlistButton, onList ? $"{_movie.Title} is on your watchlist. Open watchlist" : $"Add {_movie.Title} to watchlist");

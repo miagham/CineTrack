@@ -3,7 +3,7 @@
                     xmlns:c="clr-namespace:CineTrack.Controls">
 
     <!--
-        CineTrack design tokens (spec section 3). Only these six colors are used;
+        CineTrack design tokens. Only these six colors are used;
         everything else is one of them at reduced opacity.
     -->
     <Color x:Key="DeepRedColor">#5A0B12</Color>
@@ -170,7 +170,7 @@
     </Style>
 
     <Style x:Key="Text.Stat" TargetType="TextBlock">
-        <Setter Property="FontFamily" Value="{StaticResource Playfair}"/>
+        <Setter Property="FontFamily" Value="{StaticResource Manrope}"/>
         <Setter Property="FontWeight" Value="ExtraBold"/>
         <Setter Property="FontSize" Value="30"/>
         <Setter Property="Foreground" Value="{StaticResource Cream}"/>
@@ -233,7 +233,7 @@
         <Setter Property="Padding" Value="24"/>
     </Style>
 
-    <!-- ===== Buttons (spec 5.1) ===== -->
+    <!-- ===== Buttons ===== -->
 
     <Style x:Key="Btn.Base" TargetType="Button">
         <Setter Property="FontFamily" Value="{StaticResource Manrope}"/>
@@ -428,7 +428,7 @@
         </Style.Triggers>
     </Style>
 
-    <!-- ===== Chips (spec 5.3) ===== -->
+    <!-- ===== Chips ===== -->
 
     <!-- Genre chips / filter tabs: dark burgundy; active = gold fill. -->
     <Style x:Key="Chip" TargetType="Button" BasedOn="{StaticResource Btn.Base}">

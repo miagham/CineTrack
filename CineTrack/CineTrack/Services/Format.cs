@@ -2,7 +2,7 @@ using CineTrack.Models;
 
 namespace CineTrack.Services
 {
-    /// <summary>UI text formats from spec section 3.2.</summary>
+    /// <summary>UI text formats.</summary>
     public static class Format
     {
         public const string Dot = " · ";

@@ -7,7 +7,7 @@ namespace CineTrack.Controls
         Desktop   // ≥ 1100px
     }
 
-    /// <summary>Window-width breakpoints from spec section 9. Updated by MainWindow on resize.</summary>
+    /// <summary>Window-width breakpoints. Updated by MainWindow on resize.</summary>
     public static class Responsive
     {
         public static Breakpoint Current { get; private set; } = Breakpoint.Desktop;

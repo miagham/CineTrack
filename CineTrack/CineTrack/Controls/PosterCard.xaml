@@ -21,10 +21,10 @@
 
                 <!-- Hover / focus / tap overlay -->
                 <Border x:Name="Overlay" Background="{StaticResource Scrim}" Visibility="Collapsed" Opacity="0">
-                    <StackPanel VerticalAlignment="Center" Margin="12">
+                    <StackPanel VerticalAlignment="Center" Margin="8">
                         <TextBlock x:Name="OverlayMeta" Style="{StaticResource Text.Meta}" Foreground="{StaticResource Cream}"
                                    HorizontalAlignment="Center" Margin="0,0,0,14"/>
-                        <Button x:Name="WatchlistButton" Style="{StaticResource Btn.Primary}" FontSize="13" Padding="14,9"
+                        <Button x:Name="WatchlistButton" Style="{StaticResource Btn.Primary}" FontSize="13" Padding="8,9"
                                 Margin="0,0,0,8" Click="WatchlistButton_Click"/>
                         <Button x:Name="DetailsButton" Style="{StaticResource Btn.Secondary}" FontSize="13" Padding="14,9"
                                 Content="View details" Click="DetailsButton_Click"/>

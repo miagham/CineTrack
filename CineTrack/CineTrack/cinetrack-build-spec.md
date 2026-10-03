@@ -1,6 +1,6 @@
 # CineTrack — Build Specification
 
-> **Audience:** the LLM/developer implementing CineTrack.
+> **Audience:** CineTrack team.
 > **Source of truth:** four approved mockups (Home, Discover, Watchlist, Style Guide). This document translates them into rules, tokens, components, data, and behavior. Where the mockups conflict with each other, the **Resolved Decisions** section wins.
 
 ---

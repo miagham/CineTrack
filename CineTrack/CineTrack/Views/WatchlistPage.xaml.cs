@@ -7,7 +7,7 @@ using CineTrack.Services;
 
 namespace CineTrack
 {
-    /// <summary>My Watchlist (spec 6.3).</summary>
+    /// <summary>My Watchlist.</summary>
     public partial class WatchlistPage : CinePage
     {
         enum Filter { All, Unwatched, Watched, HighPriority }

@@ -10,7 +10,7 @@ using CineTrack.Services;
 
 namespace CineTrack
 {
-    /// <summary>Home (spec 6.1): hero, search, stats, trending, recent history and watchlist.</summary>
+    /// <summary>Home: hero, search, stats, trending, recent history and watchlist.</summary>
     public partial class HomePage : CinePage
     {
         readonly List<Movie> _heroMovies;

@@ -5,7 +5,7 @@ using CineTrack.Services;
 
 namespace CineTrack.Controls
 {
-    /// <summary>Search bar (spec 5.2). Compact in the header, large on Home and the search page.</summary>
+    /// <summary>Search bar. Compact in the header, large on Home and the search page.</summary>
     public partial class SearchBar : UserControl
     {
         public SearchBar()

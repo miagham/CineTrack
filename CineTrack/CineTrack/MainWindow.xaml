@@ -20,7 +20,7 @@
             <!-- ===== Header ===== -->
             <Border DockPanel.Dock="Top" Background="{StaticResource DarkBurgundy}"
                     BorderBrush="{StaticResource BorderSubtle}" BorderThickness="0,0,0,1">
-                <Grid x:Name="HeaderGrid" MaxWidth="1264" Height="76" Margin="32,0">
+                <Grid x:Name="HeaderGrid" MaxWidth="1600" Height="76" Margin="32,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
@@ -88,7 +88,7 @@
                 <ScrollViewer x:Name="MainScroll" Grid.Column="1" VerticalScrollBarVisibility="Auto"
                               HorizontalScrollBarVisibility="Disabled" PanningMode="VerticalOnly" Focusable="False">
                     <StackPanel>
-                        <Border x:Name="ContentColumn" MaxWidth="1264" Padding="32,48,32,0">
+                        <Border x:Name="ContentColumn" MaxWidth="1600" Padding="32,48,32,0">
                             <Frame x:Name="PageFrame" NavigationUIVisibility="Hidden" Focusable="False" IsTabStop="False"
                                    JournalOwnership="OwnsJournal" Navigated="PageFrame_Navigated"/>
                         </Border>
@@ -96,7 +96,7 @@
                         <!-- ===== Footer ===== -->
                         <Rectangle Height="16" Fill="{StaticResource FilmStripHorizontal}" Margin="0,88,0,0"/>
                         <Border Background="{StaticResource NearBlack}">
-                            <Grid x:Name="FooterGrid" MaxWidth="1264" Margin="32,36,32,40">
+                            <Grid x:Name="FooterGrid" MaxWidth="1600" Margin="32,36,32,40">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>

@@ -7,7 +7,7 @@ using CineTrack.Services;
 
 namespace CineTrack
 {
-    /// <summary>Discover / Browse by Genre (spec 6.2).</summary>
+    /// <summary>Discover / Browse by Genre.</summary>
     public partial class GenresPage : CinePage
     {
         static readonly int[] YearOptions = { 1990, 1995, 2000, 2005, 2010, 2015, 2018, 2020, 2022, 2024, 2026 };

@@ -40,7 +40,7 @@ namespace CineTrack.Services
         }
     }
 
-    /// <summary>User actions shared by every screen (spec section 8).</summary>
+    /// <summary>User actions shared by every screen.</summary>
     public static class MovieActions
     {
         static MovieStore Store => MovieStore.Instance;

@@ -3,7 +3,7 @@ using CineTrack.Models;
 namespace CineTrack.Services
 {
     /// <summary>
-    /// Catalog and starter user data taken from the approved mockups (spec section 11),
+    /// Sample movies and starter user data for testing,
     /// plus a few extra titles so every genre on Discover has something to show.
     /// </summary>
     public static class SeedData
@@ -116,7 +116,7 @@ namespace CineTrack.Services
               new[] { "David Fincher", "Jake Gyllenhaal", "Mark Ruffalo", "Robert Downey Jr." }),
         };
 
-        /// <summary>The mockups' watchlist, with dates relative to <paramref name="now"/>.</summary>
+        /// <summary>The starter watchlist, with dates relative to <paramref name="now"/>.</summary>
         public static List<UserMovieEntry> UserEntries(DateTime now) => new()
         {
             Want("dune-part-two", now.AddDays(-2), highPriority: true),

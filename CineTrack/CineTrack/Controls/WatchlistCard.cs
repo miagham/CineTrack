@@ -5,7 +5,7 @@ using CineTrack.Services;
 
 namespace CineTrack.Controls
 {
-    /// <summary>Horizontal list card used on the Watchlist (spec 5.6).</summary>
+    /// <summary>Horizontal list card used on the Watchlist.</summary>
     public static class WatchlistCard
     {
         public static Border Create(Movie m, UserMovieEntry entry, bool compact)

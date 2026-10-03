@@ -6,7 +6,7 @@ using CineTrack.Services;
 
 namespace CineTrack
 {
-    /// <summary>Movie details: hero-style header, facts, the user's rating, and similar movies (spec 6.4).</summary>
+    /// <summary>Movie details: hero-style header, facts, the user's rating, and similar movies.</summary>
     public partial class MovieDetailsPage : CinePage
     {
         readonly Movie _movie;
