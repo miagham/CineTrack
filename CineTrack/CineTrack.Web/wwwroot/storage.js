@@ -1,0 +1,1 @@
+window.cineStorage = { load: () => localStorage.getItem("cinetrack-v1"), save: value => localStorage.setItem("cinetrack-v1", value) };

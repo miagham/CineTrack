@@ -1,0 +1,40 @@
+@page "/genres"
+@implements IDisposable
+@inject WebMovieStore Store
+@inject TmdbClient Tmdb
+<PageTitle>Genres | CineTrack</PageTitle><h1>Explore by genre</h1>
+<label for="genre">Genre</label><select id="genre" @bind="genre" @bind:after="LoadMovies" disabled="@(genres.Count == 0)"><option value="">All genres</option>@foreach (var item in genres.OrderBy(g => g.Value)) { <option value="@item.Key">@item.Value</option> }</select>
+@if (loading) { <p role="status">Loading movies...</p> }
+@if (message != null) { <p role="status">@message</p> <button @onclick="Initialize">Try again</button> }
+@if (!loading && message == null && movies.Count == 0) { <p>No movies found in this genre.</p> }
+<MovieGrid Movies="movies" />
+@code {
+    string genre = "";
+    Dictionary<int, string> genres = new();
+    List<Movie> movies = [];
+    bool loading;
+    string? message;
+    CancellationTokenSource? pending;
+    protected override Task OnInitializedAsync() => Initialize();
+    async Task Initialize()
+    {
+        if (!Tmdb.IsConfigured) { message = "The movie service is not configured yet. Connect TMDB to browse genres."; return; }
+        try { genres = await Tmdb.GenresAsync(); await LoadMovies(); }
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or System.Text.Json.JsonException) { message = "Genres could not be loaded. Check the TMDB connection and try again."; }
+    }
+    async Task LoadMovies()
+    {
+        pending?.Cancel(); pending?.Dispose();
+        var request = new CancellationTokenSource(); pending = request;
+        loading = true; message = null; movies = [];
+        try {
+            var results = await Tmdb.DiscoverMoviesAsync(int.TryParse(genre, out var id) ? id : null, cancellationToken: request.Token);
+            if (pending != request) return;
+            movies = results; Store.UpsertCatalog(movies);
+        }
+        catch (OperationCanceledException) when (request.IsCancellationRequested) { }
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or System.Text.Json.JsonException) { if (pending == request) message = "Movies could not be loaded. Try again."; }
+        finally { if (pending == request) loading = false; }
+    }
+    public void Dispose() { pending?.Cancel(); pending?.Dispose(); }
+}

@@ -1,0 +1,17 @@
+@page "/watchlist"
+@page "/my-movies"
+@inject WebMovieStore Store
+@inject NavigationManager Navigation
+<PageTitle>@Title | CineTrack</PageTitle><h1>@Title</h1>
+<label for="filter">Filter</label><select id="filter" @bind="filter"><option value="all">All</option><option value="unwatched">Unwatched</option><option value="watched">Watched</option><option value="priority">High priority</option></select>
+@if(!Entries.Any()) { <p>No movies here yet. <a href="/search">Find a movie</a> to start your collection.</p> }
+@foreach(var entry in Entries.ToList()) { var movie = Store.Get(entry.MovieId)!;
+<article class="collection-item" @key="entry.MovieId"><div><h2><a href="@($"/movie/{movie.Id}")">@movie.Title</a></h2><p>@movie.Year &middot; @movie.PrimaryGenre &middot; @(entry.IsWatched ? "Watched" : "Want to watch")</p>@if(entry.UserRating != null) { <p>Your rating: @entry.UserRating / 5</p> }</div><div class="actions">
+<button @onclick="() => Store.ToggleWatched(movie.Id)">@(entry.IsWatched ? "Mark unwatched" : "Mark watched")</button>
+@if(entry.OnWatchlist) { <button @onclick="() => Store.TogglePriority(movie.Id)">@(entry.HighPriority ? "High priority" : "Set priority")</button><button @onclick="() => Store.RemoveFromWatchlist(movie.Id)">Remove from watchlist</button> }</div></article>
+}
+@code {
+ bool Watched => Navigation.ToBaseRelativePath(Navigation.Uri).StartsWith("my-movies");
+ string Title => Watched ? "My movies" : "Watchlist"; string filter = "all";
+ IEnumerable<UserMovieEntry> Entries => (Watched ? Store.WatchedEntries.OrderByDescending(e => e.WatchedAt) : Store.WatchlistDefaultOrder().AsEnumerable()).Where(e => filter == "all" || filter == "watched" && e.IsWatched || filter == "unwatched" && !e.IsWatched || filter == "priority" && e.HighPriority);
+}

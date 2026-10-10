@@ -1,0 +1,26 @@
+@page "/search"
+@implements IDisposable
+@inject WebMovieStore Store
+@inject TmdbClient Tmdb
+<PageTitle>Search | CineTrack</PageTitle><h1>Find your next movie</h1><p class="muted">Search titles, people, genres, years or phrases like under 2 hours.</p>
+<form @onsubmit="SearchMovies" @onsubmit:preventDefault><label for="query">Movie search</label><div class="search-row"><input id="query" @bind="query" placeholder="Title, actor, director..." maxlength="200" /><button type="submit">Search</button></div></form>
+<div class="chips">@foreach(var suggestion in new[] { "Science Fiction", "under 2 hours", "Animation", "2024" }) { <button @onclick="() => Suggest(suggestion)">@suggestion</button> }</div>
+@if(loading) { <p role="status">Searching...</p> } @if(message != null) { <p role="status">@message</p> }
+@if(searched && !loading) { <h2>@results.Count results</h2> @if(results.Count == 0) { <p>No movies found. Try a different title or genre.</p> } }
+<MovieGrid Movies="results" />
+@code {
+ string query = ""; string? message; bool loading, searched; List<Movie> results = []; CancellationTokenSource? pending;
+ async Task Suggest(string value) { query = value; await SearchMovies(); }
+ async Task SearchMovies() {
+  pending?.Cancel(); pending?.Dispose(); var request = new CancellationTokenSource(); pending = request;
+  var text = query.Trim(); searched = text.Length > 0; loading = searched; message = null; results = MovieSearch.RunLocal(Store.Catalog, text);
+  if(!searched) { message = "Enter a title, person, genre or year."; return; }
+  try {
+   if(Tmdb.IsConfigured) { var remote = await Tmdb.SearchMoviesAsync(text, request.Token); if(pending != request) return; Store.UpsertCatalog(remote); results = remote; }
+   else message = "The movie service is not configured. Showing matches from previously loaded movies.";
+  } catch(OperationCanceledException) when(request.IsCancellationRequested) { }
+  catch(Exception ex) when(ex is HttpRequestException or TaskCanceledException or System.Text.Json.JsonException) { if(pending == request) message = "Online search is unavailable. Showing matches from previously loaded movies."; }
+  finally { if(pending == request) loading = false; }
+ }
+ public void Dispose() { pending?.Cancel(); pending?.Dispose(); }
+}

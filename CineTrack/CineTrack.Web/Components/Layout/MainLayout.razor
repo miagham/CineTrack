@@ -1,0 +1,27 @@
+@inherits LayoutComponentBase
+@implements IDisposable
+@inject WebMovieStore Store
+@inject IJSRuntime JS
+<div class="shell"><header><a class="brand" href="/">Cine<span>Track</span></a><nav aria-label="Main navigation">
+<NavLink href="/" Match="NavLinkMatch.All">Discover</NavLink><NavLink href="/search">Search</NavLink><NavLink href="/genres">Genres</NavLink><NavLink href="/watchlist">Watchlist</NavLink><NavLink href="/my-movies">My movies</NavLink><NavLink href="/profile">Profile</NavLink><NavLink href="/about">About</NavLink>
+</nav></header>@if(notice != null) { <p role="status">@notice</p> }
+@if(ready) { <main>@Body</main> } else { <p>Loading collection...</p> }
+<footer>Your next great movie starts here.</footer></div>
+<div id="blazor-error-ui">Connection interrupted. <a href="">Reload</a></div>
+@code {
+ bool ready; string? notice;
+ protected override async Task OnAfterRenderAsync(bool firstRender) {
+  if(!firstRender) return;
+  try { var json = await JS.InvokeAsync<string?>("cineStorage.load"); if(json != null) { var data = System.Text.Json.JsonSerializer.Deserialize<SavedCollection>(json); if(data != null) Store.Restore(data.Movies, data.Entries); } }
+  catch(Exception ex) when(ex is JSException or System.Text.Json.JsonException) { notice = "Saved collection could not be loaded."; }
+  Store.Changed += OnChanged; ready = true; StateHasChanged();
+ }
+ void OnChanged() => _ = InvokeAsync(Save);
+ async Task Save() {
+  try { await JS.InvokeVoidAsync("cineStorage.save", System.Text.Json.JsonSerializer.Serialize(new SavedCollection(Store.Catalog.Where(m => m.TmdbId != null && Store.Entry(m.Id) != null).ToList(), Store.Entries.ToList()))); }
+  catch(JSException) { notice = "Browser storage is unavailable. Changes will stay in this session."; }
+  StateHasChanged();
+ }
+ public void Dispose() => Store.Changed -= OnChanged;
+ public record SavedCollection(List<Movie> Movies, List<UserMovieEntry> Entries);
+}

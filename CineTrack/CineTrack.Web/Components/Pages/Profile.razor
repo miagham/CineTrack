@@ -1,0 +1,6 @@
+@page "/profile"
+@inject WebMovieStore Store
+<PageTitle>Profile | CineTrack</PageTitle><h1>Your movie journey</h1>
+<div class="stats"><article><strong>@Store.MoviesWatched</strong>Movies watched</article><article><strong>@Store.HoursWatched</strong>Hours watched</article><article><strong>@Store.TotalSaved</strong>Saved movies</article><article><strong>@(Store.TopGenre ?? "None yet")</strong>Favorite genre</article></div>
+<h2>Recent history</h2><MovieGrid Movies="Store.RecentHistory(6).Select(e => Store.Get(e.MovieId)!)" />
+<p>Your collection is saved in this browser. It does not sync between devices.</p>
