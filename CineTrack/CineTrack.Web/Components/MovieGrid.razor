@@ -1,17 +1,32 @@
 @inject WebMovieStore Store
 @inject TmdbClient Tmdb
-@if (notice != null) { <p role="status">@notice</p> }
+@if (notice != null)
+{
+    <p role="status">@notice</p>
+}
 <div class="movie-grid">@foreach (var movie in Movies) {
     <article class="movie-card" data-genres="@string.Join("|", movie.Genres)" @key="movie.Id">
-        <a href="@($"/movie/{movie.Id}")" class="poster" style="@($"background:linear-gradient(145deg,{movie.Tint},#171820)")">
-            @if (movie.PosterUrl != null) { <img src="@movie.PosterUrl" alt="@($"{movie.Title} poster")" loading="lazy" /> }
-            else { <span>@movie.Title<br /><small>Poster unavailable</small></span> }
+        <a href="@($"/movie/{movie.Id}")" class="poster"
+           style="@($"background:linear-gradient(145deg,{movie.Tint},#171820)")">
+            @if (movie.PosterUrl != null)
+            {
+                <img src="@movie.PosterUrl" alt="@($"{movie.Title} poster")"
+                     loading="lazy" />
+            }
+            else
+            {
+
+                <span>@movie.Title<br /><small>Poster unavailable</small></span>
+            }
         </a>
         <h3><a href="@($"/movie/{movie.Id}")">@movie.Title</a></h3>
-        <p class="muted">@movie.Year &middot; @movie.PrimaryGenre &middot; Rating: @movie.CommunityRating.ToString("0.0")</p>
-        <button disabled="@(Store.Entry(movie.Id)?.OnWatchlist == true || saving.Contains(movie.Id))" @onclick="() => SaveMovie(movie)">@(saving.Contains(movie.Id) ? "Saving..." : Store.Entry(movie.Id)?.OnWatchlist == true ? "Saved" : "+ Watchlist")</button>
-    </article>
-}</div>
+        <p class="muted">@movie.Year &middot; @movie.PrimaryGenre &middot; ★ @movie.CommunityRating.ToString("0.0")</p>
+        <button disabled="@(Store.Entry(movie.Id)?.OnWatchlist == true || saving.Contains(movie.Id))"
+                @onclick="() => SaveMovie(movie)">@(saving.Contains(movie.Id) ? "Saving..." :
+                Store.Entry(movie.Id)?.OnWatchlist == true ? "Saved" : "+ Watchlist")</button>
+        </article>
+    }
+</div>
 @code {
     [Parameter] public IEnumerable<Movie> Movies { get; set; } = [];
     readonly HashSet<string> saving = new();
@@ -19,13 +34,18 @@
     async Task SaveMovie(Movie movie)
     {
         if (!saving.Add(movie.Id)) return;
-        try {
-            if (Tmdb.IsConfigured && movie.TmdbId.HasValue) {
+        try
+        {
+            if (Tmdb.IsConfigured && movie.TmdbId.HasValue)
+            {
                 var details = await Tmdb.MovieDetailsAsync(movie.TmdbId.Value);
                 if (details != null) Store.UpsertCatalog([details]);
             }
         }
-        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or System.Text.Json.JsonException) { notice = "Full details could not be loaded. The movie is saved with available information."; }
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or System.Text.Json.JsonException)
+        {
+            notice = "Full details could not be loaded. The movie is saved with available information.";
+        }
         finally { Store.AddToWatchlist(movie.Id); saving.Remove(movie.Id); }
     }
 }

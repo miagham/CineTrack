@@ -16,7 +16,7 @@
         </nav>
         @if (user != null)
         {
-            <div class="user">Hi, @user <button @onclick="SignOut">Sign out</button></div>
+            <div class="user">Hi, @user <button class="outline small" @onclick="SignOut">Sign out</button></div>
         }
     </header>@if(notice != null) {
     <p role="status">@notice</p>

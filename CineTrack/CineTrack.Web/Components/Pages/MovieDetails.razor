@@ -2,26 +2,76 @@
 @inject WebMovieStore Store
 @inject TmdbClient Tmdb
 <PageTitle>@(movie?.Title ?? "Movie not found") | CineTrack</PageTitle>
-@if (loading && movie == null) { <h1>Loading movie...</h1><p role="status">Loading details...</p> }
-else if(movie == null) { <h1>Movie not found</h1><p>@message</p><a href="/search">Search for a movie</a> }
-else {
-@if (message != null) { <p role="status">@message</p> }
-<p class="eyebrow">@string.Join(" / ", movie.Genres)</p><h1>@movie.Title</h1><p class="muted">@movie.Year &middot; @(movie.RuntimeMin > 0 ? $"{movie.RuntimeMin / 60}h {movie.RuntimeMin % 60}m" : "Runtime unavailable") &middot; @movie.Certification &middot; Rating: @movie.CommunityRating / 5</p>
-<div class="detail"><div class="detail-art" style="@($"background:{movie.Tint}")">@if(movie.PosterUrl != null) { <img src="@movie.PosterUrl" alt="@movie.Title" /> } else { <span>@movie.Title</span> }</div><div><h2>The story</h2><p>@movie.Synopsis</p><h2>Cast &amp; crew</h2><p>@string.Join(", ", movie.People)</p><div class="actions"><button disabled="@(Store.Entry(Id)?.OnWatchlist == true)" @onclick="() => Store.AddToWatchlist(Id)">@(Store.Entry(Id)?.OnWatchlist == true ? "Saved to watchlist" : "Add to watchlist")</button><button @onclick="() => Store.ToggleWatched(Id)">@(Store.Entry(Id)?.IsWatched == true ? "Mark unwatched" : "Mark watched")</button></div>
-@if(Store.Entry(Id)?.IsWatched == true) { <label for="rating">Your rating</label><select id="rating" value="@(Store.Entry(Id)?.UserRating?.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? "")" @onchange="Rate"><option value="">Choose rating</option>@for(var i = 1; i <= 10; i++) { var value = i / 2.0; <option value="@value.ToString(System.Globalization.CultureInfo.InvariantCulture)">@value / 5</option> }</select> }
-@if(movie.TrailerUrl != null) { <p><a class="button" href="@movie.TrailerUrl" target="_blank" rel="noopener noreferrer">Watch trailer</a></p> }
-</div></div>
+@if (loading && movie == null)
+{
+    <h1>Loading movie...</h1>
+    <p role="status">Loading details...</p>
 }
+else if (movie == null)
+{
+
+    <h1>Movie not found</h1>
+    <p>@message</p><a href="/search">Search for a movie</a>
+}
+else
+{
+    @if (message != null)
+    {
+        <p role="status">@message</p>
+    }
+    <p class="eyebrow">@string.Join(" / ", movie.Genres)</p>
+    <h1>@movie.Title</h1>
+    <p class="muted">@movie.Year &middot; @(movie.RuntimeMin > 0 ? $"{movie.RuntimeMin / 60}h {movie.RuntimeMin % 60}m" :
+                                    "Runtime unavailable") &middot; @movie.Certification &middot; ★ @movie.CommunityRating.ToString("0.0")</p>
+        <div class="detail">
+            <div class="detail-art" style="@($"background:{movie.Tint}")">@if(movie.PosterUrl != null) {
+                <img src="@movie.PosterUrl" alt="@movie.Title" />
+            } else
+            {
+
+                <span>@movie.Title</span>
+            }
+        </div>
+        <div>
+            <h2>The story</h2>
+            <p>@movie.Synopsis</p>
+            <h2>Cast &amp; crew</h2>
+            <p>@string.Join(", ", movie.People)</p>
+            <div class="actions"><button disabled="@(Store.Entry(Id)?.OnWatchlist == true)"
+                                             @onclick="() => Store.AddToWatchlist(Id)">@(Store.Entry(Id)?.OnWatchlist == true ? "Saved to watchlist" : "Add to watchlist")</button><button
+                @onclick="() => Store.ToggleWatched(Id)">@(Store.Entry(Id)?.IsWatched == true ? "Mark unwatched" : "Mark watched")</button></div>
+                @if (Store.Entry(Id)?.IsWatched == true)
+                {
+                    var myRating = Store.Entry(Id)?.UserRating ?? 0;
+                    <label>Your
+                        rating</label>
+                        <div class="stars">@for(var i = 1; i <= 5; i++) { var star = i;
+                            <button class="@(star <= myRating ? "on" : "")" @onclick="() => Store.SetRating(Id, star)">★</button>
+                        }
+                    </div>
+                }
+                @if (movie.TrailerUrl != null)
+                {
+                    <p><a class="button" href="@movie.TrailerUrl" target="_blank" rel="noopener noreferrer">Watch trailer</a></p>
+                }
+            </div>
+        </div>
+    }
 @code {
- [Parameter] public string Id { get; set; } = ""; Movie? movie; string? message; bool loading;
- protected override async Task OnParametersSetAsync() {
-  movie = Store.Get(Id); message = null;
-  if(Id.StartsWith("tmdb-") && int.TryParse(Id[5..], out var id) && id > 0 && Tmdb.IsConfigured) {
-   loading = true;
-   try { movie = await Tmdb.MovieDetailsAsync(id); if(movie != null) Store.UpsertCatalog([movie]); }
-   catch(Exception ex) when(ex is HttpRequestException or TaskCanceledException or System.Text.Json.JsonException) { message = "Online details are unavailable. Try again later."; }
-   finally { loading = false; }
-  }
- }
- void Rate(ChangeEventArgs e) { if(double.TryParse(e.Value?.ToString(), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var rating)) Store.SetRating(Id, rating); }
+    [Parameter] public string Id { get; set; } = ""; Movie? movie; string? message; bool loading;
+    protected override async Task OnParametersSetAsync()
+    {
+        movie = Store.Get(Id); message = null;
+        if (Id.StartsWith("tmdb-") && int.TryParse(Id[5..], out var id) && id > 0 && Tmdb.IsConfigured)
+        {
+            loading = true;
+            try { movie = await Tmdb.MovieDetailsAsync(id); if (movie != null) Store.UpsertCatalog([movie]); }
+            catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or System.Text.Json.JsonException)
+            {
+                message = "Online details are unavailable. Try again later.";
+            }
+            finally { loading = false; }
+        }
+    }
+
 }

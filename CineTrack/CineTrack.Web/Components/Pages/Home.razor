@@ -3,12 +3,31 @@
 @inject WebMovieStore Store
 @inject TmdbClient Tmdb
 <PageTitle>Discover | CineTrack</PageTitle>
-<section class="hero"><p class="eyebrow">FOR THE LOVE OF FILM</p><h1>Make time for<br />great stories.</h1><p>Discover your next favorite. Keep a watchlist. Remember every movie.</p><a class="button" href="/search">Find a movie</a></section>
-@if (loading) { <p role="status">Loading movies...</p> }
-@if (message != null) { <p role="status">@message</p> }
-@if (!loading && Tmdb.IsConfigured) { <button @onclick="LoadMovies">Refresh movies</button> }
-<h2>Trending this week</h2><MovieGrid Movies="trending" />
-<h2>Highly rated movies</h2><MovieGrid Movies="highlyRated" />
+<section class="hero">
+    <p class="eyebrow">FOR THE LOVE OF FILM</p>
+    <h1>Make time for<br />great stories.</h1>
+    <p>Discover your next favorite. Keep a watchlist. Remember every movie.</p>
+    <a class="button" href="/search">Find a movie</a>
+</section>
+@if (loading)
+{
+    <p role="status">Loading movies...</p>
+}
+@if (message != null)
+{
+    <p role="status">@message</p>
+}
+<div class="section-head">
+    <h2>Trending this week</h2>
+    @if (Tmdb.IsConfigured)
+    {
+        <button class="outline small" disabled="@loading" @onclick="LoadMovies">@(loading ? "Loading..." :
+                                                                 "Refresh")</button>
+        }
+    </div>
+<MovieGrid Movies="trending" />
+<h2>Highly rated movies</h2>
+<MovieGrid Movies="highlyRated" />
 @code {
     List<Movie> trending = [], highlyRated = [];
     bool loading;
@@ -17,10 +36,15 @@
     protected override Task OnInitializedAsync() => LoadMovies();
     async Task LoadMovies()
     {
-        if (!Tmdb.IsConfigured) { message = "The movie service is not configured yet. Connect TMDB to load movies and posters."; return; }
+        if (!Tmdb.IsConfigured)
+        {
+            message = "The movie service is not configured yet. Connect TMDB to load movies and posters.";
+            return;
+        }
         loading = true;
         message = null;
-        try {
+        try
+        {
             var trendingRequest = Tmdb.TrendingMoviesAsync(lifetime.Token);
             var ratedRequest = Tmdb.DiscoverMoviesAsync(topRated: true, cancellationToken: lifetime.Token);
             await Task.WhenAll(trendingRequest, ratedRequest);
@@ -30,7 +54,10 @@
             if (trending.Count == 0 && highlyRated.Count == 0) message = "No movies are available right now.";
         }
         catch (OperationCanceledException) when (lifetime.IsCancellationRequested) { }
-        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or System.Text.Json.JsonException) { message = "Movies could not be loaded. Check the TMDB connection and try again."; }
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or System.Text.Json.JsonException)
+        {
+            message = "Movies could not be loaded. Check the TMDB connection and try again.";
+        }
         finally { loading = false; }
     }
     public void Dispose() { lifetime.Cancel(); lifetime.Dispose(); }
